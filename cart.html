@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>장바구니 및 B2B 견적 출력 | 더드림랩</title>
+    <meta content="LG B2B 가전 장바구니 관리, 견적 금액 자동 계산 및 공식 견적서 PDF 출력/출력 서비스." name="description"/>
+    <meta name="keywords" content="더드림랩 장바구니, B2B 견적서 출력, LG가전 견적산출, 가전 견적서">
+
+    <!-- Open Graph (I-15 Fix) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="더드림랩">
+    <meta property="og:title" content="장바구니 및 견적서 출력 | 더드림랩">
+    <meta property="og:description" content="LG전자 B2B 맞춤 가전 견적 관리 및 즉시 견적서 출력">
+    <meta property="og:image" content="https://thedreamlab.co.kr/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:url" content="https://thedreamlab.co.kr/cart.html">
+    <link rel="canonical" href="https://thedreamlab.co.kr/cart.html">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+    <link href="styles.css" rel="stylesheet"/>
+
+    <style>
+        /* Printable Invoice Layout & Symmetrical Styling (I-35 Fix) */
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            header, footer, main, .cart-main-container, #global-toast-msg { display: none !important; }
+            #printableInvoice { display: block !important; visibility: visible !important; width: 100% !important; margin: 0 !important; padding: 20px !important; }
+            #printableInvoice * { visibility: visible !important; }
+            @page { size: A4 portrait; margin: 15mm; }
+            .invoice-meta-row, .invoice-print-table, tr, .print-notice-box { break-inside: avoid; page-break-inside: avoid; }
+        }
+        #printableInvoice { display: none; }
+    </style>
+</head>
+<body class="cart-page">
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a class="logo-area" href="index.html">
+                <svg class="logo-svg" height="36" style="color: var(--primary-color); flex-shrink: 0;" viewBox="0 0 100 100" width="36">
+                    <mask id="logo-mask-cart">
+                        <rect fill="white" height="100" width="100"></rect>
+                        <path d="M 10 50 H 30 L 34 56 L 38 32 L 42 68 L 46 44 L 50 50 H 54 C 54 38, 64 38, 68 48 C 72 38, 82 38, 82 50 C 82 64, 73 74, 68 78 C 63 74, 54 64, 54 50 Z" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+                    </mask>
+                    <path d="M 20 10 H 50 C 75 10 90 28 90 50 C 90 72 75 90 50 90 H 20 C 14 90 10 86 10 80 V 20 C 10 14 14 10 20 10 Z" fill="currentColor" mask="url(#logo-mask-cart)"></path>
+                </svg>
+                <div class="logo-text-group">
+                    <span class="logo-text-the">The</span>
+                    <span class="logo-text-dream">DREAM</span>
+                    <span class="logo-text-lab">LAB</span>
+                </div>
+                <span class="logo-subtext">LG 가전 패키지 B2B 전문 유통사</span>
+            </a>
+
+            <!-- Mobile Hamburger Button (S-04 Fix) -->
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="메뉴 열기" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="nav" id="main-nav">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="index.html">홈</a></li>
+                    <li><a class="nav-link" href="about.html">회사 소개</a></li>
+                    <li><a class="nav-link" href="shop.html">쇼핑</a></li>
+                    <li><a class="nav-link" href="blog.html">블로그</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="cart.html" class="cart-icon" aria-label="장바구니 보기">
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" x2="21" y1="6" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="cart-main-container">
+        <!-- Subpage Hero -->
+        <section class="sub-hero">
+            <div class="container text-center">
+                <h1 class="sub-hero-title">B2B 견적 출력</h1>
+                <p class="sub-hero-desc">B2B 전용 맞춤 가전 수량 관리, 실시간 견적 산출 및 견적서 즉시 출력</p>
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section class="cart-content-section" style="padding: 4rem 0;">
+            <div class="container">
+                <div class="cart-layout" style="display:grid; grid-template-columns: 2fr 1fr; gap:2rem;">
+                    
+                    <!-- Left Column: Business Form & Cart Table -->
+                    <div class="cart-left-col">
+                        
+                        <!-- Client B2B Information Form -->
+                        <div class="b2b-form-card" style="background:#fff; padding:2rem; border-radius:10px; border:1px solid #eee; margin-bottom:2rem;">
+                            <h2 class="b2b-card-title mb-3 font-bold" style="font-size:1.2rem;">1. 고객 및 사업장 정보 입력</h2>
+                            <form id="cart-consult-form">
+                                <div class="form-group" style="margin-bottom: 1.2rem;">
+                                    <label class="form-label font-bold mb-2" style="display:block;">업장 업종 선택 *</label>
+                                    <div class="b2b-type-selector" style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                                        <label class="b2b-radio-label active" style="padding:0.6rem 1rem; border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+                                            <input type="radio" name="b2b_type" value="원룸 / 오피스텔" checked required> 원룸 / 오피스텔
+                                        </label>
+                                        <label class="b2b-radio-label" style="padding:0.6rem 1rem; border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+                                            <input type="radio" name="b2b_type" value="호텔 / 모텔"> 호텔 / 모텔
+                                        </label>
+                                        <label class="b2b-radio-label" style="padding:0.6rem 1rem; border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+                                            <input type="radio" name="b2b_type" value="게스트하우스"> 게스트하우스
+                                        </label>
+                                        <label class="b2b-radio-label" style="padding:0.6rem 1rem; border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+                                            <input type="radio" name="b2b_type" value="기타 업종"> 기타 업종
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-3">
+                                    <div class="form-group">
+                                        <label class="form-label font-bold" for="cartCompany">상호명 / 법인명 *</label>
+                                        <input type="text" id="cartCompany" placeholder="예: (주)더드림모텔" required class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label font-bold" for="cartCEO">대표자 / 담당자 성함 *</label>
+                                        <input type="text" id="cartCEO" placeholder="예: 홍길동 대표" required class="form-input">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label font-bold" for="cartPhone">연락처 *</label>
+                                    <input type="tel" id="cartPhone" placeholder="예: 010-1234-5678" required class="form-input">
+                                </div>
+
+                                <!-- Personal Info Consent (S-08 Fix) -->
+                                <div class="form-group mb-2">
+                                    <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.88rem; color:#444; cursor:pointer;">
+                                        <input type="checkbox" name="privacy_consent" required style="accent-color:var(--primary-color); width:18px; height:18px;">
+                                        <span>개인정보 수집 및 이용에 동의합니다 (필수) <a href="privacy.html" target="_blank" rel="noopener noreferrer" style="text-decoration:underline; color:var(--primary-color);">[약관보기]</a></span>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Cart Products Table -->
+                        <div class="b2b-cart-table-card" style="background:#fff; padding:2rem; border-radius:10px; border:1px solid #eee;">
+                            <h2 class="b2b-card-title mb-3 font-bold" style="font-size:1.2rem;">2. 장바구니</h2>
+                            
+                            <div class="empty-cart-msg text-center py-4" style="display: none;">
+                                <div class="empty-cart-icon mb-2" style="font-size:3rem;">🛒</div>
+                                <h3 class="mb-3 font-bold">장바구니가 비어 있습니다.</h3>
+                                <a href="shop.html" class="btn btn-primary" style="padding: 0.6rem 1.8rem;">상품 담으러 가기</a>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="cart-table" style="width:100%; border-collapse:collapse;">
+                                    <thead>
+                                        <tr style="border-bottom:2px solid #eee; text-align:left; font-size:0.9rem; color:#555; background:#fafafa;">
+                                            <th style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle;">이미지</th>
+                                            <th style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle;">제품명 / 규격 / 모델명</th>
+                                            <th class="text-right" style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle; position:relative;">
+                                                <span style="display:inline-block; position:relative;">
+                                                    단가
+                                                    <span style="position:absolute; top:100%; right:0; white-space:nowrap; font-size:0.6rem; color:#888; font-weight:normal; line-height:1; margin-top:2px;">(VAT포함)</span>
+                                                </span>
+                                            </th>
+                                            <th class="text-center" style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle;">수량</th>
+                                            <th class="text-right" style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle;">소계</th>
+                                            <th class="text-center" style="padding:0.75rem 0.5rem 1.1rem 0.5rem; vertical-align:middle;">삭제</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cartTableBody">
+                                        <!-- Dynamic rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Estimate Total & Action Buttons -->
+                    <div class="cart-right-col">
+                        <div class="summary-card" style="background:#fff; padding:2rem; border-radius:10px; border:1px solid #eee; position:sticky; top:100px;">
+                            <h2 class="font-bold mb-3" style="font-size:1.2rem; border-bottom:1px solid #eee; padding-bottom:0.8rem;">견적 금액 합계</h2>
+                            
+                            <div class="cart-summary-row" style="margin-bottom:0.8rem; font-size:0.95rem;">
+                                <span>총 선택 품목:</span>
+                                <strong id="summaryTotalItems" style="color:#111;">0개</strong>
+                            </div>
+                            <div class="cart-summary-row" style="margin-bottom:0.8rem; font-size:0.95rem;">
+                                <span>공급가액:</span>
+                                <span id="summarySubtotal" style="color:#444;">₩0</span>
+                            </div>
+                            <div class="cart-summary-row" style="border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 1.2rem; font-size:0.95rem;">
+                                <span>부가세 (10%):</span>
+                                <span id="summaryTax" style="color:#777;">₩0</span>
+                            </div>
+                            <div class="cart-summary-row grand-total-row" style="margin-bottom:1.5rem;">
+                                <span style="font-size:1.05rem; font-weight:700;">총 견적합계:</span>
+                                <strong id="summaryTotal" style="font-size:1.4rem; color:var(--primary-color);">₩0</strong>
+                            </div>
+
+                            <div class="cart-actions" style="display:flex; flex-direction:column; gap:0.8rem;">
+                                <button type="button" id="btnPrintEstimate" class="btn btn-primary btn-block" style="padding:0.95rem;">
+                                    🖨️ 견적서 출력 (PDF 저장)
+                                </button>
+                                <button type="submit" form="cart-consult-form" id="btnSubmitConsult" class="btn btn-dark btn-block" style="padding:0.95rem;">
+                                    📩 맞춤 견적 상담 신청하기
+                                </button>
+                                <a href="shop.html" class="continue-shopping text-center mt-2" style="font-size:0.88rem; color:#666; text-decoration:underline;">쇼핑 계속하기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Printable Invoice Page (I-33, I-34, I-35 Symmetrical & Full Business Data Fix) -->
+    <div id="printableInvoice" class="print-only">
+        <div class="print-invoice-main-title" role="heading" aria-level="2" style="text-align:center; font-size:2.2rem; font-weight:900; margin-bottom:1.5rem; letter-spacing:4px; text-decoration:underline;">견 적 서</div>
+        
+        <div class="invoice-meta-row" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem;">
+            <!-- Symmetrical Recipient Box (I-35 Fix) -->
+            <div class="invoice-client-info" style="border: 1px solid #000; padding: 12px; border-radius: 4px;">
+                <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:6px; border-bottom:1px solid #000; padding-bottom:4px;">공급받는 자 (Recipient)</h3>
+                <p style="margin-bottom:4px;"><strong>수 신:</strong> <span id="printClientCompany">________</span> 귀중</p>
+                <p style="margin-bottom:4px;"><strong>대 표:</strong> <span id="printClientCEO">________</span> 님</p>
+                <p style="margin-bottom:4px;"><strong>연락처:</strong> <span id="printClientPhone">________</span></p>
+                <p style="margin-bottom:4px;"><strong>구 분:</strong> <span id="printClientType">________</span> 가전 견적</p>
+                <p style="margin-bottom:0;"><strong>발행일자:</strong> <span id="printDate"></span></p>
+            </div>
+            
+            <!-- Complete Supplier Box (S-06, I-34 Fix) -->
+            <div class="invoice-supplier-info" style="border: 1px solid #000; padding: 12px; border-radius: 4px; position:relative;">
+                <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:6px; border-bottom:1px solid #000; padding-bottom:4px;">공급자 (Supplier)</h3>
+                <p style="margin-bottom:4px;"><strong>상 호:</strong> 주식회사 더드림 랩 (The Dream Lab)</p>
+                <p style="margin-bottom:4px;"><strong>대 표:</strong> 가성</p>
+                <p style="margin-bottom:4px;"><strong>사업자등록번호:</strong> 184-88-02605</p>
+                <p style="margin-bottom:4px;"><strong>업태 / 종목:</strong> 정보통신업·도소매업 / 응용 소프트웨어 개발 및 공급업·전자기기 및 주변기기 제조·도매업</p>
+                <p style="margin-bottom:4px;"><strong>연락처:</strong> 1544-3820 | 02-943-8590</p>
+                <p style="margin-bottom:0;"><strong>주 소:</strong> 서울특별시 성북구 화랑로 211, 308호</p>
+                <div class="print-supplier-seal" style="position:absolute; bottom:12px; right:15px; border:2px red solid; color:red; font-size:0.8rem; padding:2px 6px; border-radius:50%; font-weight:bold; transform:rotate(-15deg);">더드림랩 (인)</div>
+            </div>
+        </div>
+
+        <div class="print-korean-total-box" style="border:2px solid #000; padding:10px; text-align:center; font-size:1.15rem; font-weight:800; margin-bottom:1.5rem; background:#f9f9f9;">
+            합계금액: <span id="printGrandTotal">0</span>원 (VAT 포함)
+        </div>
+
+        <table class="invoice-print-table" style="width:100%; border-collapse:collapse; border:1px solid #000; margin-bottom:1.5rem;">
+            <thead>
+                <tr style="background:#f0f0f0; border-bottom:1px solid #000;">
+                    <th style="text-align: center; width: 6%; border:1px solid #000; padding:8px;">번호</th>
+                    <th style="border:1px solid #000; padding:8px;">품목명 및 상세 규격 </th>
+                    <th style="text-align: center; width: 18%; border:1px solid #000; padding:8px;">모델명</th>
+                    <th style="text-align: right; width: 16%; border:1px solid #000; padding:8px;">단가 (원)</th>
+                    <th style="text-align: center; width: 8%; border:1px solid #000; padding:8px;">수량</th>
+                    <th style="text-align: right; width: 18%; border:1px solid #000; padding:8px;">금액 (원)</th>
+                </tr>
+            </thead>
+            <tbody id="printInvoiceBody">
+                <!-- Dynamic rows -->
+            </tbody>
+            <tfoot>
+                <tr class="tfoot-sum-row" style="border-top:1px solid #000;">
+                    <td colspan="3" style="text-align: center; border:1px solid #000; padding:8px; font-weight:700;">합 계</td>
+                    <td colspan="2" style="text-align: right; border:1px solid #000; padding:8px; line-height:1.6;">공급가액:<br>부가세 (10%):</td>
+                    <td style="text-align: right; border:1px solid #000; padding:8px; line-height:1.6; font-weight:700;">
+                        <span id="printSubtotal">0</span><br>
+                        <span id="printTax">0</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="print-notice-box" style="border:1px solid #ccc; padding:12px; font-size:0.85rem; line-height:1.6;">
+            <p class="print-notice-title" style="font-weight:800; margin-bottom:6px;">[특약사항 / Notice]</p>
+            <ol style="padding-left:1.2rem; margin:0;">
+                <li>본 견적서는 사이트에 등록된 B2B 가전 공급가를 기준으로 작성되며, 대량 발주 수량과 공급 조건에 따라 최종 금액이 달라질 수 있습니다.</li>
+                <li>배송비와 설치비는 품목 및 현장 조건별로 상이합니다. 벽걸이 에어컨 SQ06EZ1WBS는 기본설치비 91,300원이 별도이며, 타공·사다리차 등 특수 조건 시 비용이 추가될 수 있습니다.</li>
+                <li>견적 유효기간은 작성일로부터 30일간입니다.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-area" style="pointer-events: none;">
+                            <svg class="logo-svg" height="32" viewBox="0 0 100 100" width="32" style="color: var(--primary-color);">
+                                <mask id="footer-logo-mask-cart-f">
+                                    <rect fill="white" height="100" width="100"></rect>
+                                    <path d="M 10 50 H 30 L 34 56 L 38 32 L 42 68 L 46 44 L 50 50 H 54 C 54 38, 64 38, 68 48 C 72 38, 82 38, 82 50 C 82 64, 73 74, 68 78 C 63 74, 54 64, 54 50 Z" fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"></path>
+                                </mask>
+                                <path d="M 20 10 H 50 C 75 10 90 28 90 50 C 90 72 75 90 50 90 H 20 C 14 90 10 86 10 80 V 20 C 10 14 14 10 20 10 Z" fill="currentColor" mask="url(#footer-logo-mask-cart-f)"></path>
+                            </svg>
+                            <div class="logo-text-group">
+                                <span class="logo-text-the">The</span>
+                                <span class="logo-text-dream">DREAM</span>
+                                <span class="logo-text-lab">LAB</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="brand-desc mt-3">
+                        LG전자 B2B 가전 유통·납품 전문 (주)더드림랩입니다.<br>
+                        <small style="color:#aaa;">정품 가전 공급 | 배송·설치비는 품목 및 현장 조건별 상이 | 폐가전 수거 상담</small>
+                    </p>
+                    <div class="company-details" style="font-size: 0.82rem; color: #6b7280; line-height: 1.6; margin-top: 1rem;">
+                        <p>상호: 주식회사 더드림 랩 (The Dream Lab) | 대표자: 가성 | 사업자등록번호: 184-88-02605</p>
+                        <p>사업장 소재지: 서울특별시 성북구 화랑로 211, 308호 | 대표전화: 1544-3820 | 이메일: itsceo@thedreamlab.co.kr | 개인정보보호책임자: 가성</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #eee;">
+                <p class="trademark-notice mb-2" style="font-size: 0.8rem; color: #9ca3af;">※ LG 및 LG 로고는 LG전자의 등록상표입니다. 제품명과 상표는 상품 식별 목적으로 사용됩니다.</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; font-size:0.85rem; color:#6b7280;">
+                    <p class="copyright">&copy; 2026 주식회사 더드림 랩. All rights reserved.</p>
+                    <div class="footer-links">
+                        <a href="privacy.html" style="margin-right:1rem; text-decoration:underline;">개인정보처리방침</a>
+                        <a href="terms.html" style="text-decoration:underline;">이용약관</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="site-config.js"></script>
+    <script src="script.js?v=3"></script>
+</body>
+</html>

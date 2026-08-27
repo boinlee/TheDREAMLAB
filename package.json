@@ -1,0 +1,13 @@
+{
+  "name": "thedreamlab_homepage",
+  "version": "1.0.0",
+  "description": "더드림랩 LG 가전 패키지 B2B 정적 웹사이트",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
