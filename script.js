@@ -13,6 +13,30 @@ function isFormEndpointConfigured() {
     return /^https:\/\//.test(FORM_ENDPOINT);
 }
 
+const SUPABASE_URL = typeof window.DREAMLAB_SUPABASE_URL === 'string'
+    ? window.DREAMLAB_SUPABASE_URL.replace(/\/$/, '')
+    : '';
+const SUPABASE_PUBLISHABLE_KEY = typeof window.DREAMLAB_SUPABASE_PUBLISHABLE_KEY === 'string'
+    ? window.DREAMLAB_SUPABASE_PUBLISHABLE_KEY.trim()
+    : '';
+
+// Formspree 전송 성공 여부와 무관하게, 문의 기록을 사내 Supabase에 비동기로 보관합니다.
+// RLS 정책상 브라우저에서는 INSERT만 가능하며 조회·수정·삭제 권한은 없습니다.
+function saveQuoteRequest(request) {
+    if (!/^https:\/\//.test(SUPABASE_URL) || !SUPABASE_PUBLISHABLE_KEY) return;
+
+    fetch(`${SUPABASE_URL}/rest/v1/quote_requests`, {
+        method: 'POST',
+        headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(request)
+    }).catch(error => console.warn('Supabase 문의 저장에 실패했습니다.', error));
+}
+
 // 1. 단일 정본 상품 데이터베이스 (PRODUCTS_DATA)
 // ※ 모델코드·제품명·사양·가격 전부 원본 단가표(원룸모델오피스텔.xlsx) 기준.
 //    가격은 원본 시트의 "공급가"를 판매가로 사용. 원본에 없는 사양은 임의로 넣지 않음.
@@ -488,6 +512,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Accept': 'application/json' }
             }).then(response => {
                 if (response.ok) {
+                    saveQuoteRequest({
+                        source: 'quick-quote',
+                        customer_name: name,
+                        phone,
+                        business_type: selectedPropertyType,
+                        message: memo,
+                        items: [{
+                            pyeong: selectedPyeong,
+                            tier: selectedTier,
+                            tv: currentRecommendation.tv,
+                            fridge: currentRecommendation.fridge,
+                            washer: currentRecommendation.washer,
+                            selected_price: chosenPrice
+                        }]
+                    });
                     showToastMessage(`상담 신청이 정상적으로 입력되었습니다. B2B 전담 매니저가 유선으로 연락드리겠습니다.`, 'success');
                     const confProp = document.getElementById('confProp');
                     if (confProp) confProp.textContent = `${selectedPropertyType} (${selectedPyeong}평) - ${selectedTier}`;
@@ -613,6 +652,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Accept': 'application/json' }
             }).then(response => {
                 if (response.ok) {
+                    saveQuoteRequest({
+                        source: 'contact-form',
+                        customer_name: name,
+                        phone,
+                        email: email || null,
+                        business_type: company || null,
+                        message,
+                        items: []
+                    });
                     showToastMessage(`${name}님, 문의 내용이 접수되었습니다. 담당자가 확인 후 신속히 유선 연락드리겠습니다.`, 'success');
                     contactForm.reset();
                 } else {
@@ -978,6 +1026,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Accept': 'application/json' }
                 }).then(response => {
                     if (response.ok) {
+                        saveQuoteRequest({
+                            source: 'cart-quote',
+                            customer_name: ceo || company || '미입력',
+                            phone,
+                            email: email || null,
+                            business_type: businessType || null,
+                            message: company ? `${company} 견적 문의` : '장바구니 견적 문의',
+                            items: quoteItems,
+                            total_amount: quoteTotal
+                        });
                         showToastMessage(`[접수 완료] ${company} (${ceo} 대표님), 견적 문의가 접수되었습니다. 유선으로 상세 안내해 드리겠습니다.`, 'success');
                         localStorage.setItem('dreamLabCart', '[]');
                         renderCartPage();
